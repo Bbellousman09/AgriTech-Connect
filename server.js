@@ -23,7 +23,7 @@ db.connect((err) => {
         return;  
     }  
     console.log('Connected to the database.');  
-});
+});  
 
 // Middleware  
 app.use(bodyParser.urlencoded({ extended: true }));  
@@ -31,7 +31,9 @@ app.use(session({
     secret: process.env.SESSION_SECRET,  
     resave: false,  
     saveUninitialized: true,  
-    cookie: { secure: process.env.NODE_ENV === 'production' } // Use true in production  
+    cookie: {   
+        secure: process.env.NODE_ENV === 'production' // Use true in production  
+    }  
 }));  
 
 // Serve static files  
@@ -43,12 +45,29 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');  
 });  
 
+app.get('/about', (req, res) => {  
+    res.sendFile(__dirname + '/about.html'); // Adjust the path if it's in a different folder  
+});
+
+app.get('/contact', (req, res) => {  
+    res.sendFile(__dirname + '/contact.html'); // Adjust the path if it's in a different folder  
+});
+
+app.get('/features', (req, res) => {  
+    res.sendFile(__dirname + '/features.html'); // Adjust the path if it's in a different folder  
+});
+
+app.get('/resources', (req, res) => {  
+    res.sendFile(__dirname + '/resources.html'); // Adjust the path if it's in a different folder  
+});
+
 app.get('/register', (req, res) => {  
-    res.sendFile(__dirname + '/register.html');  
-});  
+    res.sendFile(__dirname + '/register.html'); // Ensure register.html is in the same directory as server.js  
+}); 
 
 app.get('/login', (req, res) => {  
-    res.sendFile(__dirname + '/login.html');  
+    const message = req.query.message ? req.query.message : '';  
+    res.sendFile(__dirname + '/login.html'); // Optionally pass the message to the login page  
 });  
 
 app.get('/profile', (req, res) => {  
@@ -66,17 +85,23 @@ app.get('/profile', (req, res) => {
         const user = results[0];  
         res.send(`<h1>Welcome, ${user.username}</h1><p>Email: ${user.email}</p><a href="/logout">Logout</a>`);  
     });  
-});
+});  
 
 app.post('/register', async (req, res) => {  
     const { username, email, password } = req.body;  
+
+    // Basic validation  
+    if (!username || !email || !password) {  
+        return res.status(400).send('All fields are required!');  
+    }  
+
     const hashedPassword = await bcrypt.hash(password, 10);  
 
     db.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPassword], (error, results) => {  
         if (error) {  
             return res.status(400).send('Error registering user: ' + error.message);  
         }  
-        res.redirect('/login');  
+        res.redirect('/login?message=Registration successful! Please log in.');  
     });  
 });  
 
@@ -107,7 +132,7 @@ app.post('/login', (req, res) => {
             res.status(400).send('Invalid credentials');   
         }  
     });  
-});
+});  
 
 app.get('/logout', (req, res) => {  
     req.session.destroy((err) => {  
@@ -116,7 +141,7 @@ app.get('/logout', (req, res) => {
         }  
         res.redirect('/login'); // Redirect to login after logout  
     });  
-});
+});  
 
 // Start the server  
 app.listen(PORT, () => {  
