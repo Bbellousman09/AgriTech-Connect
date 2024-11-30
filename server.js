@@ -31,14 +31,11 @@ app.use(session({
     secret: process.env.SESSION_SECRET,  
     resave: false,  
     saveUninitialized: true,  
-    cookie: {   
-        secure: process.env.NODE_ENV === 'production' // Use true in production  
-    }  
+    cookie: { secure: process.env.NODE_ENV === 'production' }  
 }));  
 
-// Serve static files  
-app.use(express.static('styles'));  
-app.use(express.static('scripts'));  
+// Serve static files from the root directory  
+app.use(express.static(__dirname));  
 
 // Routes  
 app.get('/', (req, res) => {  
@@ -46,35 +43,34 @@ app.get('/', (req, res) => {
 });  
 
 app.get('/about', (req, res) => {  
-    res.sendFile(__dirname + '/about.html'); // Adjust the path if it's in a different folder  
-});
+    res.sendFile(__dirname + '/about.html');  
+});  
 
 app.get('/contact', (req, res) => {  
-    res.sendFile(__dirname + '/contact.html'); // Adjust the path if it's in a different folder  
-});
+    res.sendFile(__dirname + '/contact.html');  
+});  
 
 app.get('/features', (req, res) => {  
-    res.sendFile(__dirname + '/features.html'); // Adjust the path if it's in a different folder  
-});
+    res.sendFile(__dirname + '/features.html');  
+});  
 
 app.get('/resources', (req, res) => {  
-    res.sendFile(__dirname + '/resources.html'); // Adjust the path if it's in a different folder  
-});
+    res.sendFile(__dirname + '/resources.html');  
+});  
 
 app.get('/register', (req, res) => {  
-    res.sendFile(__dirname + '/register.html'); // Ensure register.html is in the same directory as server.js  
-}); 
+    res.sendFile(__dirname + '/register.html');  
+});   
 
 app.get('/login', (req, res) => {  
-    const message = req.query.message ? req.query.message : '';  
-    res.sendFile(__dirname + '/login.html'); // Optionally pass the message to the login page  
+    res.sendFile(__dirname + '/login.html');  
 });  
 
 app.get('/profile', (req, res) => {  
     if (!req.session.userId) {  
-        return res.redirect('/login'); // Redirect to login if not logged in  
+        return res.redirect('/login');  
     }  
-    
+
     db.query('SELECT * FROM users WHERE id = ?', [req.session.userId], (error, results) => {  
         if (error) {  
             return res.status(500).send('Error fetching user data');  
@@ -82,6 +78,7 @@ app.get('/profile', (req, res) => {
         if (results.length === 0) {  
             return res.status(404).send('User not found');  
         }  
+
         const user = results[0];  
         res.send(`<h1>Welcome, ${user.username}</h1><p>Email: ${user.email}</p><a href="/logout">Logout</a>`);  
     });  
@@ -119,7 +116,7 @@ app.post('/login', (req, res) => {
         }  
 
         if (results.length === 0) {  
-            return res.status(400).send('Invalid credentials'); // User not found  
+            return res.status(400).send('Invalid credentials');  
         }  
         
         const user = results[0];  
@@ -139,7 +136,7 @@ app.get('/logout', (req, res) => {
         if (err) {  
             return res.status(500).send('Could not log out user');  
         }  
-        res.redirect('/login'); // Redirect to login after logout  
+        res.redirect('/login');  
     });  
 });  
 
