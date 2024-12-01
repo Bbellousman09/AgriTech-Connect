@@ -68,21 +68,10 @@ app.get('/login', (req, res) => {
 
 app.get('/profile', (req, res) => {  
     if (!req.session.userId) {  
-        return res.redirect('/login');  
+        return res.redirect('/login');  // Redirect to login if the user is not authenticated  
     }  
-
-    db.query('SELECT * FROM users WHERE id = ?', [req.session.userId], (error, results) => {  
-        if (error) {  
-            return res.status(500).send('Error fetching user data');  
-        }  
-        if (results.length === 0) {  
-            return res.status(404).send('User not found');  
-        }  
-
-        const user = results[0];  
-        res.send(`<h1>Welcome, ${user.username}</h1><p>Email: ${user.email}</p><a href="/logout">Logout</a>`);  
-    });  
-});  
+    res.sendFile(__dirname + '/profile.html');  // Serve the profile HTML page  
+}); 
 
 app.post('/register', async (req, res) => {  
     const { username, email, password } = req.body;  
@@ -118,16 +107,34 @@ app.post('/login', (req, res) => {
         if (results.length === 0) {  
             return res.status(400).send('Invalid credentials');  
         }  
-        
+
         const user = results[0];  
         const passwordMatch = await bcrypt.compare(password, user.password);  
-        
+
         if (passwordMatch) {  
-            req.session.userId = user.id;   
-            res.redirect('/profile');  
+            req.session.userId = user.id;  // Store user ID in session  
+            res.redirect('/profile');        // Redirect to profile page on successful login  
         } else {  
             res.status(400).send('Invalid credentials');   
         }  
+    });  
+});
+app.get('/api/user', (req, res) => {  
+    if (!req.session.userId) {  
+        return res.status(401).json({ message: 'Unauthorized' });  
+    }  
+
+    db.query('SELECT username, email, createdAt, profilePicture FROM users WHERE id = ?', [req.session.userId], (error, results) => {  
+        if (error) {  
+            return res.status(500).json({ error: 'Database error' });  
+        }  
+
+        if (results.length === 0) {  
+            return res.status(404).json({ message: 'User not found' });  
+        }  
+
+        const user = results[0];  
+        res.json(user);  
     });  
 });  
 

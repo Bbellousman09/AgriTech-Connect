@@ -12,10 +12,61 @@ header {
     text-align: center;  
 }  
 
-.logo {  
-    height: 100px;  
-    width: auto;  
+.container {  
+    max-width: 800px;  
+    margin: 50px auto;  
+    padding: 20px;  
+    background: white;  
+    border-radius: 8px;  
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);  
+}    
+
+.profile-card {  
+    display: flex;  
+    align-items: center;  
+    margin-top: 20px;  
 }  
+
+.profile-image {  
+    flex: 0 0 120px; /* Fixed width for profile picture */  
+    margin-right: 20px;  
+}  
+
+.profile-image img {  
+    width: 100%;  
+    height: auto;  
+    border-radius: 50%;  
+    border: 2px solid #efefef;  
+}  
+
+.profile-info {  
+    flex-grow: 1;  
+}  
+
+.profile-info h2 {  
+    margin: 0 0 10px 0;  
+}  
+
+.edit-button, .logout-button {  
+    display: inline-block;  
+    margin-top: 10px;  
+    padding: 10px 15px;  
+    color: white;  
+    background-color: #007bff;  
+    text-decoration: none;  
+    border-radius: 5px;  
+}  
+
+.edit-button:hover, .logout-button:hover {  
+    background-color: #0056b3;  
+}
+
+.logo {  
+        height: 80px; /* Adjust logo size */  
+        width: auto;  
+        margin-right: 20px; /* Space between logo and text */  
+    }   
+
 
 img {  
     height: auto; /* Responsive image height */  
