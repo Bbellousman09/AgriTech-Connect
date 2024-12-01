@@ -6,14 +6,74 @@ body {
 }  
 
 header {  
-    background-color: #4CAF50;  
+    background-color: #4CAF50;   
     color: white;  
     padding: 15px 0;  
     text-align: center;  
 }  
 
+.logo {  
+    height: 100px;  
+    width: auto;  
+}  
+
+img {  
+    height: auto; /* Responsive image height */  
+    max-height: 200px; /* Limit height */  
+    width: 100%; /* Make images responsive */  
+    object-fit: contain; /* Maintain aspect ratio */  
+}  
+
+.nav {   
+    display: flex;  
+    flex-direction: row; /* Align items horizontally */  
+    list-style-type: none; /* Remove bullets */  
+    padding: 0; /* Remove default padding */  
+    margin: 0;   
+    justify-content: center; /* Center align the navigation */  
+}  
+
+.nav a {  
+    background-color: #4CAF50; /* Background color for nav items */  
+    color: black; /* Text color */  
+    text-decoration: none; /* Remove underline */  
+    padding: 5px; /* Add padding for touch area */  
+    border-radius: 4px; /* Rounded corners for buttons */  
+    margin: 0 5px; /* Add horizontal spacing between links */  
+    transition: background-color 0.3s; /* Smooth transition on hover */  
+}  
+
+.nav a:hover {  
+    background-color: #45a049; /* Darker shade on hover */  
+}  
+
 main {  
-    padding: 20px;  
+    padding: 20px;   
+    background-color: #ffffff; /* White background for contrast */  
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */  
+    border-radius: 8px; /* Rounded corners */  
+    margin: 20px; /* Margin around main content */  
+}  
+
+h2 {  
+    color: #333; /* Darker color for headings */  
+}  
+
+.cta-button {  
+    background-color: #4CAF50;  
+    color: white;  
+    padding: 15px 25px;  
+    text-align: center;  
+    text-decoration: none;  
+    display: inline-block;  
+    border: none;  
+    cursor: pointer;  
+    transition: background-color 0.3s;  
+    border-radius: 4px; /* Rounded corners */  
+}  
+
+.cta-button:hover {  
+    background-color: #45a049;  
 }  
 
 form {  
@@ -25,11 +85,14 @@ form {
 
 label {  
     margin-top: 10px;  
+    color: #555; /* Softer color for better readability */  
 }  
 
 input {  
     padding: 10px;  
     margin-top: 5px;  
+    border: 1px solid #ccc;  
+    border-radius: 4px; /* Rounded corners */  
 }  
 
 button {  
@@ -39,6 +102,7 @@ button {
     color: white;  
     border: none;  
     cursor: pointer;  
+    border-radius: 4px; /* Rounded corners */  
 }  
 
 button:hover {  
